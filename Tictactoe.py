@@ -14,18 +14,9 @@ class Tictactoe:
                 self.board += '\n'
         return self.board
 
-<<<<<<< HEAD
-    def move(self, player):
-        player = player
-        if player == 'X':
-            move = input('\nPlayer 1, make your move. ')
-        else:
-            move = input('\nPlayer 2, make your move. ')
-        for i in range(0, 9):
-=======
+
     def move(self, player, move):
         for i in range(0,9):
->>>>>>> 3e2fe6a2925f44036a0ee7f0327dd0091172fd39
             if move == self.playingField[i]:
                 self.playingField[i] = player
                 print(self.playingField)
