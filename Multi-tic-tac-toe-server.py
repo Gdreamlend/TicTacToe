@@ -38,7 +38,7 @@ def service_connection(key, mask):
             data.outb = data.outb[sent:]
             
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socket.bind(('10.55.49.150', 65432))
+socket.bind(('10.55.76.78', 65432))
 socket.listen()
 conn, host = socket.accept()
 print("listening on", (host,65432))

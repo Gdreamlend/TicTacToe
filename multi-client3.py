@@ -6,7 +6,7 @@ import time
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect the socket to the port where the server is listening
-server_address = ('10.55.49.150', 65432)
+server_address = ('10.55.76.78', 65432)
 print('connecting to %s port %s' , server_address)
 sock.connect(server_address)
 

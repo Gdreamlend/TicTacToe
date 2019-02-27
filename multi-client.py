@@ -3,7 +3,7 @@ import selectors
 import types
 sel = selectors.DefaultSelector()
 
-HOST = '10.55.49.150'  # The server's hostname or IP address
+HOST = '10.55.76.78'  # The server's hostname or IP address
 PORT = 65432        # The port used by the server
 
 
