@@ -1,8 +1,11 @@
 import socket
 import select
+from Tictactoe import Tictactoe
+
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('10.55.49.150', 65432))
 sock.listen(2)
+tic = Tictactoe()
 
 # lists of sockets to watch for input and output events
 ins = [sock]
@@ -19,6 +22,8 @@ try:
             if x is sock:
                 # input event on sock means client trying to connect
                 newSocket, address = sock.accept(  )
+                sock.setblocking(False)
+
                 print( "Connected from", address)
                 ins.append(newSocket)
                 adrs[newSocket] = address
@@ -40,9 +45,11 @@ try:
         for x in o:
             # output events always mean we can send some data
             tosend = data.get(x).encode()
+            board = tic.board.encode()
             if tosend:
-                nsent = x.send(tosend)
-                print(nsent, " bytes to" , adrs[x])
+                #nsent = x.send(tosend)
+                nsent = x.send(board)
+                #print(nsent, " bytes to" , adrs[x])
                 # remember data still to be sent, if any
                 tosend = tosend[nsent:]
             if tosend:
@@ -53,4 +60,5 @@ try:
                 ous.remove(x)
                 print("No data currently remain for", adrs[x])
 finally:
-    sock.close(  )
+    print("waiting")
+    #sock.close(  )
