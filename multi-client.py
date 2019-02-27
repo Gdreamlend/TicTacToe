@@ -15,7 +15,6 @@ def service_connection(key, mask):
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
             print(recv_data.decode())
-            #print('received', repr(recv_data.decode()), 'from connection', data.connid)
             data.recv_total += len(recv_data)
             data.messages[0] = input("Please choose the number where you will move to:").encode()
         if not recv_data or data.recv_total == data.msg_total:
@@ -27,10 +26,10 @@ def service_connection(key, mask):
             data.messages[0] = input("Please choose the number where you will move to:").encode()
             data.outb = data.messages[0]
         if data.outb:
-            print('sending', repr(data.outb), 'to connection', data.connid)
+            # print('sending', repr(data.outb), 'to connection', data.connid)
             sent = sock.send(data.outb)  # Should be ready to write
             data.outb = data.outb[sent:]
-#
+
 def start_connections(host, port, num_conns):
     server_addr = (host, port)
     for i in range(0, num_conns):
