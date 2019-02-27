@@ -5,7 +5,6 @@ import time
 sel = selectors.DefaultSelector()
 
 HOST = '10.55.49.133'  # The server's hostname or IP address
-
 PORT = 65432        # The port used by the server
 
 
@@ -18,7 +17,6 @@ def service_connection(key, mask):
         if recv_data:
             print(recv_data.decode())
             data.recv_total += len(recv_data)
-            time.sleep(5)
             data.messages[0] = input("Please choose the number where you will move to:").encode()
         if not recv_data or data.recv_total == data.msg_total:
             print('closing connection', data.connid)
