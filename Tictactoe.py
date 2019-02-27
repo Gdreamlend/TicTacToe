@@ -2,8 +2,6 @@ class Tictactoe:
     def __init__(self):
         self.playingField = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
         self.board = ""
-        self.showBoard()
-        print(self.board)
 
     def showBoard(self):
         self.board = ""
@@ -14,7 +12,9 @@ class Tictactoe:
                 self.board += '| '
             if i == 2 or i == 5:
                 self.board += '\n'
+        return self.board
 
+<<<<<<< HEAD
     def move(self, player):
         player = player
         if player == 'X':
@@ -22,9 +22,13 @@ class Tictactoe:
         else:
             move = input('\nPlayer 2, make your move. ')
         for i in range(0, 9):
+=======
+    def move(self, player, move):
+        for i in range(0,9):
+>>>>>>> 3e2fe6a2925f44036a0ee7f0327dd0091172fd39
             if move == self.playingField[i]:
                 self.playingField[i] = player
-        self.showBoard()
+                print(self.playingField)
         win = self.checkWin(player)
         return win
 

@@ -6,7 +6,7 @@ sel = selectors.DefaultSelector()
 tic = Tictactoe()
 
 tic.showBoard()
-
+address_list = []
 
 def accept_wrapper(sock):
     conn, addr = sock.accept()  # Should be ready to read
@@ -22,25 +22,37 @@ def service_connection(key, mask):
     if mask & selectors.EVENT_READ:
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
-            print(recv_data)
             data.outb += recv_data
-            #data.outb += "helllo"
         else:
             print('closing connection to', data.addr)
             sel.unregister(sock)
             sock.close()
     if mask & selectors.EVENT_WRITE:
+        win = False
         if data.outb:
-            print('echoing', repr(data.outb), 'to', data.addr)
-            board = tic.board.encode()
-            #sent = sock.send(board)
-            sent = sock.send(board)  # Should be ready to write
-            data.outb = data.outb[sent:]
+            if data.addr[0] == address_list[0]:
+                win = tic.move('X', data.outb.decode())
+            else:
+                win = tic.move('O', data.outb.decode())
+
+            if win:
+                sent = sock.send(b'You win')  # Should be ready to write
+                data.outb = data.outb[sent:]
+                # addr2 = (address_list[1],65432)
+                # data2 = types.SimpleNamespace(addr=addr2, inb=b'', outb=b'')
+                # sent = sock.send(b'You Lose')  # Should be ready to write
+                # data2.outb = data.outb[sent:]
+
+            else:
+                board = tic.showBoard().encode()
+                sent = sock.send(board)  # Should be ready to write
+                data.outb = data.outb[sent:]
             
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket.bind(('10.55.76.78', 65432))
 socket.listen()
 conn, host = socket.accept()
+address_list.append(host)
 print("listening on", (host,65432))
 socket.setblocking(False)
 sel.register(socket, selectors.EVENT_READ, data=None)
