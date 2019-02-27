@@ -10,6 +10,8 @@ address_list = []
 
 def accept_wrapper(sock):
     conn, addr = sock.accept()  # Should be ready to read
+    if addr[0] not in address_list:
+        address_list.append(host[0])
     print('accepted connection from', addr)
     conn.setblocking(False)
     data = types.SimpleNamespace(addr=addr, inb=b'', outb=b'')
@@ -25,8 +27,8 @@ def service_connection(key, mask):
             data.outb += recv_data
         else:
             print('closing connection to', data.addr)
-            sel.unregister(sock)
-            sock.close()
+            # sel.unregister(sock)
+            # sock.close()
     if mask & selectors.EVENT_WRITE:
         win = False
         if data.outb:
@@ -36,26 +38,40 @@ def service_connection(key, mask):
                 win = tic.move('O', data.outb.decode())
 
             if win:
+                board = tic.showBoard().encode()
+                sent = sock.send(board)  # Should be ready to write
+                data.outb = data.outb[sent:]
                 sent = sock.send(b'You win')  # Should be ready to write
                 data.outb = data.outb[sent:]
-                # addr2 = (address_list[1],65432)
-                # data2 = types.SimpleNamespace(addr=addr2, inb=b'', outb=b'')
-                # sent = sock.send(b'You Lose')  # Should be ready to write
-                # data2.outb = data.outb[sent:]
+                # if len(address_list) > 1:
+                #     for ad in address_list:
+                #         if ad != data.addr[0]:
+                #             addr2 = (ad, 65432)
+                #             data2 = types.SimpleNamespace(addr=addr2, inb=b'', outb=b'')
+                #             sent = sock.send(board)  # Should be ready to write
+                #             data2.outb = data.outb[sent:]
 
             else:
                 board = tic.showBoard().encode()
                 sent = sock.send(board)  # Should be ready to write
                 data.outb = data.outb[sent:]
+                # if len(address_list) > 1:
+                #     for ad in address_list:
+                #         if ad != data.addr[0]:
+                #             addr2 = (ad, 65432)
+                #             data2 = types.SimpleNamespace(addr=addr2, inb=b'', outb=b'')
+                #             sent = sock.send(board)  # Should be ready to write
+                #             data2.outb = data.outb[sent:]
             
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socket.bind(('10.55.49.150', 65432))
+socket.bind(('10.55.49.133', 65432))
 socket.listen()
 conn, host = socket.accept()
-address_list.append(host)
+address_list.append(host[0])
 print("listening on", (host,65432))
 socket.setblocking(False)
 sel.register(socket, selectors.EVENT_READ, data=None)
+
 while True:
     events = sel.select(timeout=None)
     for key, mask in events:

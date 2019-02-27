@@ -1,9 +1,10 @@
 import socket
 import selectors
 import types
+import time
 sel = selectors.DefaultSelector()
 
-HOST = '10.55.49.150'  # The server's hostname or IP address
+HOST = '10.55.49.133'  # The server's hostname or IP address
 PORT = 65432        # The port used by the server
 
 
@@ -16,6 +17,7 @@ def service_connection(key, mask):
         if recv_data:
             print(recv_data.decode())
             data.recv_total += len(recv_data)
+            time.sleep(5)
             data.messages[0] = input("Please choose the number where you will move to:").encode()
         if not recv_data or data.recv_total == data.msg_total:
             print('closing connection', data.connid)
@@ -23,7 +25,7 @@ def service_connection(key, mask):
             sock.close()
     if mask & selectors.EVENT_WRITE:
         if not data.outb and data.messages:
-            data.messages[0] = input("Please choose the number where you will move to:").encode()
+            #data.messages[0] = input("Please choose the number where you will move to:").encode()
             data.outb = data.messages[0]
         if data.outb:
             # print('sending', repr(data.outb), 'to connection', data.connid)
