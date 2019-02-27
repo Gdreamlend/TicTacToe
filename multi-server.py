@@ -3,7 +3,7 @@ import select
 from Tictactoe import Tictactoe
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(('10.55.49.150', 65432))
+sock.bind(('10.55.76.78', 65432))
 sock.listen(2)
 tic = Tictactoe()
 

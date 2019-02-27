@@ -5,6 +5,7 @@ import time
 sel = selectors.DefaultSelector()
 
 HOST = '10.55.49.133'  # The server's hostname or IP address
+
 PORT = 65432        # The port used by the server
 
 

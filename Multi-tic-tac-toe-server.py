@@ -65,6 +65,7 @@ def service_connection(key, mask):
             
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket.bind(('10.55.49.133', 65432))
+
 socket.listen()
 conn, host = socket.accept()
 address_list.append(host[0])
